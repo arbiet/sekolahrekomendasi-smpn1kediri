@@ -48,12 +48,35 @@
                             <input type="url" name="website" value="{{ $schoolTarget->website }}" class="mt-1 block w-full border p-2 rounded">
                         </div>
 
+                        <div class="mb-4">
+                            <label for="passing_rate" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-chart-line"></i> Passing Rate
+                            </label>
+                            <input type="number" name="passing_rate" value="{{ $schoolTarget->academics->first()->passing_rate ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="average_score" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-chart-bar"></i> Average Score
+                            </label>
+                            <input type="number" name="average_score" value="{{ $schoolTarget->academics->first()->average_score ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
+                        </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <button type="submit" class="bg-blue-500 text-white p-2 rounded">
                                 <i class="fas fa-save"></i> Update
                             </button>
                         </div>
                     </form>
+
+                    <div class="flex items-center justify-between mt-6">
+                        <a href="{{ route('facilities.create') }}" class="bg-green-500 text-white p-2 rounded">
+                            <i class="fas fa-plus"></i> Add Facility
+                        </a>
+                        <a href="{{ route('extracurriculars.create') }}" class="bg-green-500 text-white p-2 rounded">
+                            <i class="fas fa-plus"></i> Add Extracurricular
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -47,6 +47,20 @@
                             <input type="url" name="website" class="mt-1 block w-full border p-2 rounded" value="{{ old('website') }}">
                         </div>
 
+                        <div class="mb-4">
+                            <label for="passing_rate" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-chart-line"></i> Passing Rate
+                            </label>
+                            <input type="number" name="passing_rate" class="mt-1 block w-full border p-2 rounded" value="{{ old('passing_rate') }}" step="0.01">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="average_score" class="block text-sm font-medium text-gray-700">
+                                <i class="fas fa-chart-bar"></i> Average Score
+                            </label>
+                            <input type="number" name="average_score" class="mt-1 block w-full border p-2 rounded" value="{{ old('average_score') }}" step="0.01">
+                        </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <button type="submit" class="bg-blue-500 text-white p-2 rounded">
                                 <i class="fas fa-save"></i> Create
