@@ -37,7 +37,7 @@
                                     <td>{{ $school->city }}</td>
                                     <td>{{ $school->accreditation }}</td>
                                     <td class="space-x-2">
-                                        <a href="{{ route('schooltargets.edit', $school->id) }}" class="bg-yellow-500 text-white p-2 rounded">
+                                        <a href="{{ route('schooltargets.edit', $schoolTarget->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         <button onclick="confirmDelete(event, {{ $school->id }})" class="bg-red-500 text-white p-2 rounded">

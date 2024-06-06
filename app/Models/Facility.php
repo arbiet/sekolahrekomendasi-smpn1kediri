@@ -10,12 +10,15 @@ class Facility extends Model
     use HasFactory;
 
     protected $fillable = [
-        'target_school_id',
+        'school_target_id',
         'facility_name',
         'facility_description',
     ];
 
-    public function targetSchool()
+    /**
+     * Get the school target that owns the facility.
+     */
+    public function schoolTarget()
     {
         return $this->belongsTo(SchoolTarget::class);
     }
