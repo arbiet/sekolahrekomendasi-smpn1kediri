@@ -19,6 +19,9 @@
                         <x-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
                             {{ __('Student Management') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('schooltargets.index')" :active="request()->routeIs('schooltargets.index')">
+                            {{ __('School Target Management') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -78,6 +81,9 @@
             @if(Auth::user()->usertype === 'itstaff')
                 <x-responsive-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
                     {{ __('Student Management') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('schooltargets.index')" :active="request()->routeIs('schooltargets.index')">
+                    {{ __('School Target Management') }}
                 </x-responsive-nav-link>
             @endif
         </div>

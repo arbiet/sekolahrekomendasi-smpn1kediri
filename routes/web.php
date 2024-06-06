@@ -6,12 +6,11 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ITStaffController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentManagementController;
+use App\Http\Controllers\SchoolTargetController;
 use RealRashid\SweetAlert\ToSweetAlert;
 
 require __DIR__.'/auth.php';
 
-
-// Routes
 Route::middleware(['web', ToSweetAlert::class])->group(function () {
     Route::get('/', function () {
         return view('welcome');
@@ -33,5 +32,6 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
 
     Route::middleware(['auth', 'itstaff'])->group(function () {
         Route::resource('students', StudentManagementController::class);
+        Route::resource('schooltargets', SchoolTargetController::class);
     });
 });
