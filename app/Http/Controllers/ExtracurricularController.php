@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Extracurricular;
-use App\Models\SchoolTarget;
+use App\Models\TargetSchool;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -21,7 +21,7 @@ class ExtracurricularController extends Controller
 
     public function create()
     {
-        $schools = SchoolTarget::all();
+        $schools = TargetSchool::all();
         return view('itstaff.extracurriculars.create', compact('schools'));
     }
 
@@ -30,7 +30,7 @@ class ExtracurricularController extends Controller
         $request->validate([
             'activity_name' => 'required',
             'activity_description' => 'required',
-            'school_target_id' => 'required|exists:school_targets,id',
+            'school_target_id' => 'required|exists:target_schools,id',
         ]);
 
         Extracurricular::create($request->all());
@@ -41,7 +41,7 @@ class ExtracurricularController extends Controller
 
     public function edit(Extracurricular $extracurricular)
     {
-        $schools = SchoolTarget::all();
+        $schools = TargetSchool::all();
         return view('itstaff.extracurriculars.edit', compact('extracurricular', 'schools'));
     }
 
@@ -50,7 +50,7 @@ class ExtracurricularController extends Controller
         $request->validate([
             'activity_name' => 'required',
             'activity_description' => 'required',
-            'school_target_id' => 'required|exists:school_targets,id',
+            'school_target_id' => 'required|exists:target_schools,id',
         ]);
 
         $extracurricular->update($request->all());

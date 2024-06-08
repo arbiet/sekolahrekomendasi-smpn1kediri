@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Facility;
-use App\Models\SchoolTarget;
+use App\Models\TargetSchool;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -21,7 +21,7 @@ class FacilityController extends Controller
 
     public function create()
     {
-        $schools = SchoolTarget::all();
+        $schools = TargetSchool::all();
         return view('itstaff.facilities.create', compact('schools'));
     }
 
@@ -30,7 +30,7 @@ class FacilityController extends Controller
         $request->validate([
             'facility_name' => 'required',
             'facility_description' => 'required',
-            'school_target_id' => 'required|exists:school_targets,id',
+            'school_target_id' => 'required|exists:target_schools,id',
         ]);
 
         Facility::create($request->all());
@@ -41,7 +41,7 @@ class FacilityController extends Controller
 
     public function edit(Facility $facility)
     {
-        $schools = SchoolTarget::all();
+        $schools = TargetSchool::all();
         return view('itstaff.facilities.edit', compact('facility', 'schools'));
     }
 
@@ -50,7 +50,7 @@ class FacilityController extends Controller
         $request->validate([
             'facility_name' => 'required',
             'facility_description' => 'required',
-            'school_target_id' => 'required|exists:school_targets,id',
+            'school_target_id' => 'required|exists:target_schools,id',
         ]);
 
         $facility->update($request->all());

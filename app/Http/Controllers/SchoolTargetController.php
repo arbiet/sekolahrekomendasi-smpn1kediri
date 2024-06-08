@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SchoolTarget;
+use App\Models\TargetSchool;
 use App\Models\Academic;
 use App\Models\Facility;
 use App\Models\Extracurricular;
@@ -17,13 +17,16 @@ class SchoolTargetController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $schools = SchoolTarget::when($search, function ($query, $search) {
-                            return $query->where('name', 'like', "%$search%")
-                                         ->orWhere('city', 'like', "%$search%");
-                        })
-                        ->paginate(10);
+        $schools = TargetSchool::with(['facilities', 'extracurriculars'])
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%$search%")
+                            ->orWhere('city', 'like', "%$search%");
+            })
+            ->paginate(10);
+
         return view('itstaff.schooltargets.index', compact('schools', 'search'));
     }
+
 
     /**
      * Show the form for creating a new school.
@@ -48,11 +51,11 @@ class SchoolTargetController extends Controller
             'average_score' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $schoolTarget = SchoolTarget::create($request->all());
+        $targetSchool = TargetSchool::create($request->all());
 
         if ($request->filled('passing_rate') || $request->filled('average_score')) {
             Academic::create([
-                'school_target_id' => $schoolTarget->id,
+                'school_target_id' => $targetSchool->id,
                 'passing_rate' => $request->input('passing_rate'),
                 'average_score' => $request->input('average_score'),
             ]);
@@ -66,15 +69,15 @@ class SchoolTargetController extends Controller
     /**
      * Show the form for editing the specified school.
      */
-    public function edit(SchoolTarget $schoolTarget)
+    public function edit(TargetSchool $targetSchool)
     {
-        return view('itstaff.schooltargets.edit', compact('schoolTarget'));
+        return view('itstaff.schooltargets.edit', compact('targetSchool'));
     }
 
     /**
      * Update the specified school in storage.
      */
-    public function update(Request $request, SchoolTarget $schoolTarget)
+    public function update(Request $request, TargetSchool $targetSchool)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -86,10 +89,10 @@ class SchoolTargetController extends Controller
             'average_score' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $schoolTarget->update($request->all());
+        $targetSchool->update($request->all());
 
         if ($request->filled('passing_rate') || $request->filled('average_score')) {
-            $academic = $schoolTarget->academics->first();
+            $academic = $targetSchool->academics->first();
             if ($academic) {
                 $academic->update([
                     'passing_rate' => $request->input('passing_rate'),
@@ -97,7 +100,7 @@ class SchoolTargetController extends Controller
                 ]);
             } else {
                 Academic::create([
-                    'school_target_id' => $schoolTarget->id,
+                    'school_target_id' => $targetSchool->id,
                     'passing_rate' => $request->input('passing_rate'),
                     'average_score' => $request->input('average_score'),
                 ]);
@@ -112,9 +115,9 @@ class SchoolTargetController extends Controller
     /**
      * Remove the specified school from storage.
      */
-    public function destroy(SchoolTarget $schoolTarget)
+    public function destroy(TargetSchool $targetSchool)
     {
-        $schoolTarget->delete();
+        $targetSchool->delete();
 
         Alert::success('Success', 'School deleted successfully');
 
@@ -124,56 +127,61 @@ class SchoolTargetController extends Controller
     /**
      * Display the specified school.
      */
-    public function show(SchoolTarget $schoolTarget)
+    public function show(TargetSchool $targetSchool)
     {
-        return view('itstaff.schooltargets.show', compact('schoolTarget'));
+        return view('itstaff.schooltargets.show', compact('targetSchool'));
     }
 
-    public function attachFacilities(SchoolTarget $schoolTarget, Request $request)
+    public function attachFacilities(TargetSchool $targetSchool, Request $request)
     {
         $search = $request->input('search');
-        $facilities = $schoolTarget->facilities()
-            ->where('facility_name', 'like', '%' . $search . '%')
-            ->orWhere('facility_description', 'like', '%' . $search . '%')
+        $facilities = $targetSchool->facilities()
+            ->when($search, function ($query, $search) {
+                return $query->where('facility_name', 'like', '%' . $search . '%')
+                             ->orWhere('facility_description', 'like', '%' . $search . '%');
+            })
             ->paginate(10);
-
-        return view('itstaff.schooltargets.attach_facilities', compact('schoolTarget', 'facilities'));
+    
+        return view('itstaff.schooltargets.attach_facilities', compact('targetSchool', 'facilities'));
     }
+    
 
-    public function storeFacility(SchoolTarget $schoolTarget, Request $request)
+    public function storeFacility(TargetSchool $targetSchool, Request $request)
     {
         $request->validate([
             'facility_name' => 'required',
             'facility_description' => 'required',
         ]);
 
-        $schoolTarget->facilities()->create($request->all());
+        $targetSchool->facilities()->create($request->all());
         Alert::success('Success', 'Facility attached successfully.');
 
-        return redirect()->route('schooltargets.facilities.attach', $schoolTarget->id);
+        return redirect()->route('schooltargets.facilities.attach', $targetSchool->id);
     }
 
-    public function attachExtracurriculars(SchoolTarget $schoolTarget, Request $request)
+    public function attachExtracurriculars(TargetSchool $targetSchool, Request $request)
     {
         $search = $request->input('search');
-        $extracurriculars = $schoolTarget->extracurriculars()
-            ->where('activity_name', 'like', '%' . $search . '%')
-            ->orWhere('activity_description', 'like', '%' . $search . '%')
+        $extracurriculars = $targetSchool->extracurriculars()
+            ->when($search, function ($query, $search) {
+                return $query->where('activity_name', 'like', '%' . $search . '%')
+                             ->orWhere('activity_description', 'like', '%' . $search . '%');
+            })
             ->paginate(10);
-
-        return view('itstaff.schooltargets.attach_extracurriculars', compact('schoolTarget', 'extracurriculars'));
+    
+        return view('itstaff.schooltargets.attach_extracurriculars', compact('targetSchool', 'extracurriculars'));
     }
-
-    public function storeExtracurricular(SchoolTarget $schoolTarget, Request $request)
+    
+    public function storeExtracurricular(TargetSchool $targetSchool, Request $request)
     {
         $request->validate([
             'activity_name' => 'required',
             'activity_description' => 'required',
         ]);
 
-        $schoolTarget->extracurriculars()->create($request->all());
+        $targetSchool->extracurriculars()->create($request->all());
         Alert::success('Success', 'Extracurricular attached successfully.');
 
-        return redirect()->route('schooltargets.extracurriculars.attach', $schoolTarget->id);
+        return redirect()->route('schooltargets.extracurriculars.attach', $targetSchool->id);
     }
 }
