@@ -1,4 +1,4 @@
-<!-- resources/views/itstaff/schooltargets/index.blade.php -->
+<!-- resources/views/itstaff/schools/index.blade.php -->
 
 <x-app-layout>
     <x-slot name="header">
@@ -12,14 +12,14 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="flex justify-between mb-4">
-                        <form method="GET" action="{{ route('schooltargets.index') }}">
+                        <form method="GET" action="{{ route('schools.index') }}">
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search schools..." class="border p-2 rounded">
                             <button type="submit" class="bg-blue-500 text-white p-2 rounded">
                                 <i class="fas fa-search"></i> Search
                             </button>
                         </form>
                         <div class="flex space-x-2">
-                            <a href="{{ route('schooltargets.create') }}" class="bg-green-500 text-white p-2 rounded">
+                            <a href="{{ route('schools.create') }}" class="bg-green-500 text-white p-2 rounded">
                                 <i class="fas fa-plus"></i> Add School
                             </a>
                             <a href="{{ route('facilities.index') }}" class="bg-blue-500 text-white p-2 rounded">
@@ -45,7 +45,7 @@
                         <tbody>
                             @foreach($schools as $school)
                                 <tr class="hover:bg-gray-200">
-                                    <td class="cursor-pointer" onclick="window.location='{{ route('schooltargets.show', $school->id) }}'">{{ $school->name }}</td>
+                                    <td class="cursor-pointer" onclick="window.location='{{ route('schools.show', $school->id) }}'">{{ $school->name }}</td>
                                     <td>{{ $school->city }}</td>
                                     <td>{{ $school->accreditation }}</td>
                                     <td>
@@ -69,20 +69,20 @@
                                         </div>
                                     </td>
                                     <td class="space-x-2">
-                                        <a href="{{ route('schooltargets.edit', $school->id) }}" class="bg-yellow-500 text-white p-2 rounded">
+                                        <a href="{{ route('schools.edit', $school->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         <button onclick="confirmDelete(event, {{ $school->id }})" class="bg-red-500 text-white p-2 rounded">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
-                                        <form id="delete-form-{{ $school->id }}" action="{{ route('schooltargets.destroy', $school->id) }}" method="POST" style="display: none;">
+                                        <form id="delete-form-{{ $school->id }}" action="{{ route('schools.destroy', $school->id) }}" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
                                         </form>
-                                        <a href="{{ route('schooltargets.facilities.attach', $school->id) }}" class="bg-blue-500 text-white p-2 rounded">
+                                        <a href="{{ route('schools.facilities.attach', $school->id) }}" class="bg-blue-500 text-white p-2 rounded">
                                             <i class="fas fa-building"></i> Facilities
                                         </a>
-                                        <a href="{{ route('schooltargets.extracurriculars.attach', $school->id) }}" class="bg-blue-500 text-white p-2 rounded">
+                                        <a href="{{ route('schools.extracurriculars.attach', $school->id) }}" class="bg-blue-500 text-white p-2 rounded">
                                             <i class="fas fa-futbol"></i> Extracurriculars
                                         </a>
                                     </td>

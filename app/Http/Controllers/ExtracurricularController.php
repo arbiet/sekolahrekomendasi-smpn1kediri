@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Extracurricular;
-use App\Models\TargetSchool;
+use App\Models\School;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -21,7 +21,7 @@ class ExtracurricularController extends Controller
 
     public function create()
     {
-        $schools = TargetSchool::all();
+        $schools = School::all();
         return view('itstaff.extracurriculars.create', compact('schools'));
     }
 
@@ -41,7 +41,7 @@ class ExtracurricularController extends Controller
 
     public function edit(Extracurricular $extracurricular)
     {
-        $schools = TargetSchool::all();
+        $schools = School::all();
         return view('itstaff.extracurriculars.edit', compact('extracurricular', 'schools'));
     }
 

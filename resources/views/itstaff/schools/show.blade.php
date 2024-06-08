@@ -10,22 +10,22 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="mb-4">
-                        <strong><i class="fas fa-school"></i> Name:</strong> {{ $targetSchool->name }}
+                        <strong><i class="fas fa-school"></i> Name:</strong> {{ $school->name }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-map-marker-alt"></i> Address:</strong> {{ $targetSchool->address }}
+                        <strong><i class="fas fa-map-marker-alt"></i> Address:</strong> {{ $school->address }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-city"></i> City:</strong> {{ $targetSchool->city }}
+                        <strong><i class="fas fa-city"></i> City:</strong> {{ $school->city }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-star"></i> Accreditation:</strong> {{ $targetSchool->accreditation }}
+                        <strong><i class="fas fa-star"></i> Accreditation:</strong> {{ $school->accreditation }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-globe"></i> Website:</strong> <a href="{{ $targetSchool->website }}" target="_blank">{{ $targetSchool->website }}</a>
+                        <strong><i class="fas fa-globe"></i> Website:</strong> <a href="{{ $school->website }}" target="_blank">{{ $school->website }}</a>
                     </div>
                     <div class="mt-4">
-                        <a href="{{ route('schooltargets.edit', $targetSchool->id) }}" class="bg-yellow-500 text-white p-2 rounded">
+                        <a href="{{ route('schools.edit', $school->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                             <i class="fas fa-edit"></i> Edit
                         </a>
                     </div>

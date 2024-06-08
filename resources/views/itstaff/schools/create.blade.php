@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit School') }}
+            {{ __('Create School') }}
         </h2>
     </x-slot>
 
@@ -9,74 +9,64 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('schooltargets.update', $targetSchool->id) }}">
+                    <form method="POST" action="{{ route('schools.store') }}">
                         @csrf
-                        @method('PUT')
 
                         <div class="mb-4">
                             <label for="name" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-school"></i> Name
                             </label>
-                            <input type="text" name="name" value="{{ $targetSchool->name }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="text" name="name" class="mt-1 block w-full border p-2 rounded" value="{{ old('name') }}">
                         </div>
 
                         <div class="mb-4">
                             <label for="address" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-map-marker-alt"></i> Address
                             </label>
-                            <textarea name="address" class="mt-1 block w-full border p-2 rounded">{{ $targetSchool->address }}</textarea>
+                            <textarea name="address" class="mt-1 block w-full border p-2 rounded">{{ old('address') }}</textarea>
                         </div>
 
                         <div class="mb-4">
                             <label for="city" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-city"></i> City
                             </label>
-                            <input type="text" name="city" value="{{ $targetSchool->city }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="text" name="city" class="mt-1 block w-full border p-2 rounded" value="{{ old('city') }}">
                         </div>
 
                         <div class="mb-4">
                             <label for="accreditation" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-star"></i> Accreditation
                             </label>
-                            <input type="text" name="accreditation" value="{{ $targetSchool->accreditation }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="text" name="accreditation" class="mt-1 block w-full border p-2 rounded" value="{{ old('accreditation') }}">
                         </div>
 
                         <div class="mb-4">
                             <label for="website" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-globe"></i> Website
                             </label>
-                            <input type="url" name="website" value="{{ $targetSchool->website }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="url" name="website" class="mt-1 block w-full border p-2 rounded" value="{{ old('website') }}">
                         </div>
 
                         <div class="mb-4">
                             <label for="passing_rate" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-chart-line"></i> Passing Rate
                             </label>
-                            <input type="number" name="passing_rate" value="{{ $targetSchool->academics->first()->passing_rate ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
+                            <input type="number" name="passing_rate" class="mt-1 block w-full border p-2 rounded" value="{{ old('passing_rate') }}" step="0.01">
                         </div>
 
                         <div class="mb-4">
                             <label for="average_score" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-chart-bar"></i> Average Score
                             </label>
-                            <input type="number" name="average_score" value="{{ $targetSchool->academics->first()->average_score ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
+                            <input type="number" name="average_score" class="mt-1 block w-full border p-2 rounded" value="{{ old('average_score') }}" step="0.01">
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <button type="submit" class="bg-blue-500 text-white p-2 rounded">
-                                <i class="fas fa-save"></i> Update
+                                <i class="fas fa-save"></i> Create
                             </button>
                         </div>
                     </form>
-
-                    <div class="flex items-center justify-between mt-6">
-                        <a href="{{ route('facilities.create') }}" class="bg-green-500 text-white p-2 rounded">
-                            <i class="fas fa-plus"></i> Add Facility
-                        </a>
-                        <a href="{{ route('extracurriculars.create') }}" class="bg-green-500 text-white p-2 rounded">
-                            <i class="fas fa-plus"></i> Add Extracurricular
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

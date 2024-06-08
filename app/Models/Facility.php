@@ -18,8 +18,8 @@ class Facility extends Model
     /**
      * Get the school target that owns the facility.
      */
-    public function schoolTarget()
+    public function school()
     {
-        return $this->belongsTo(SchoolTarget::class);
+        return $this->belongsTo(School::class);
     }
 }

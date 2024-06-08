@@ -9,7 +9,7 @@ use App\Models\Extracurricular;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class SchoolTargetController extends Controller
+class SchoolController extends Controller
 {
     /**
      * Display a listing of the schools.

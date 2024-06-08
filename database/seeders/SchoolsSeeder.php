@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TargetSchoolsSeeder extends Seeder
+class SchoolsSeeder extends Seeder
 {
     public function run()
     {
@@ -20,6 +20,6 @@ class TargetSchoolsSeeder extends Seeder
             ['name' => 'SMA Negeri 8 Kota Kediri', 'address' => 'Jl. Patimura No.8', 'city' => 'Kediri', 'accreditation' => 'A', 'website' => 'http://sman8kediri.sch.id'],
         ];
 
-        DB::table('target_schools')->insert($schools);
+        DB::table('schools')->insert($schools);
     }
 }

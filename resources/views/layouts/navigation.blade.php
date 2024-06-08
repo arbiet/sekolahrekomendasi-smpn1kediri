@@ -19,7 +19,7 @@
                         <x-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
                             {{ __('Student Management') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('schooltargets.index')" :active="request()->routeIs('schooltargets.index')">
+                        <x-nav-link :href="route('schools.index')" :active="request()->routeIs('schools.index')">
                             {{ __('School Target Management') }}
                         </x-nav-link>
                     @endif
@@ -82,7 +82,7 @@
                 <x-responsive-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
                     {{ __('Student Management') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('schooltargets.index')" :active="request()->routeIs('schooltargets.index')">
+                <x-responsive-nav-link :href="route('schools.index')" :active="request()->routeIs('schools.index')">
                     {{ __('School Target Management') }}
                 </x-responsive-nav-link>
             @endif

@@ -14,12 +14,12 @@ class FacilitiesSeeder extends Seeder
             'Computer Room', 'Music Room', 'Art Room', 'Science Lab', 'Medical Room'
         ];
 
-        $schools = DB::table('target_schools')->get();
+        $schools = DB::table('schools')->get(); // Mengubah target_schools menjadi schools
 
         foreach ($schools as $school) {
             foreach ($facilities as $facility) {
                 DB::table('facilities')->insert([
-                    'target_school_id' => $school->id,
+                    'school_id' => $school->id, // Mengubah target_school_id menjadi school_id
                     'facility_name' => $facility,
                     'facility_description' => $facility . ' description',
                 ]);

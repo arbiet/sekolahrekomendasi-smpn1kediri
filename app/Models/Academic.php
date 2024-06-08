@@ -18,8 +18,8 @@ class Academic extends Model
     /**
      * Get the school target that owns the academic record.
      */
-    public function schoolTarget()
+    public function school()
     {
-        return $this->belongsTo(SchoolTarget::class);
+        return $this->belongsTo(School::class);
     }
 }
