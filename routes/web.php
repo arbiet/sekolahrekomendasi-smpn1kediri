@@ -3,6 +3,8 @@
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ExtracurricularController;
 use App\Http\Controllers\SchoolTargetController;
+use App\Http\Controllers\ITStaffController;
+use App\Http\Controllers\StudentManagementController;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\ToSweetAlert;
 
@@ -39,10 +41,10 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
         Route::get('schooltargets', [SchoolTargetController::class, 'index'])->name('schooltargets.index');
         Route::get('schooltargets/create', [SchoolTargetController::class, 'create'])->name('schooltargets.create');
         Route::post('schooltargets', [SchoolTargetController::class, 'store'])->name('schooltargets.store');
-        Route::get('schooltargets/{schoolTarget}', [SchoolTargetController::class, 'show'])->name('schooltargets.show');
-        Route::get('schooltargets/{schoolTarget}/edit', [SchoolTargetController::class, 'edit'])->name('schooltargets.edit');
-        Route::patch('schooltargets/{schoolTarget}', [SchoolTargetController::class, 'update'])->name('schooltargets.update');
-        Route::delete('schooltargets/{schoolTarget}', [SchoolTargetController::class, 'destroy'])->name('schooltargets.destroy');
+        Route::get('schooltargets/{targetSchool}', [SchoolTargetController::class, 'show'])->name('schooltargets.show');
+        Route::get('schooltargets/{targetSchool}/edit', [SchoolTargetController::class, 'edit'])->name('schooltargets.edit');
+        Route::patch('schooltargets/{targetSchool}', [SchoolTargetController::class, 'update'])->name('schooltargets.update');
+        Route::delete('schooltargets/{targetSchool}', [SchoolTargetController::class, 'destroy'])->name('schooltargets.destroy');
 
         // Routes for Facilities
         Route::get('facilities', [FacilityController::class, 'index'])->name('facilities.index');
@@ -61,10 +63,10 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
         Route::delete('extracurriculars/{extracurricular}', [ExtracurricularController::class, 'destroy'])->name('extracurriculars.destroy');
 
         // Routes for attaching facilities and extracurriculars to school targets
-        Route::get('schooltargets/{schoolTarget}/facilities', [SchoolTargetController::class, 'attachFacilities'])->name('schooltargets.facilities.attach');
-        Route::post('schooltargets/{schoolTarget}/facilities', [SchoolTargetController::class, 'storeFacility'])->name('schooltargets.facilities.store');
+        Route::get('schooltargets/{targetSchool}/facilities', [SchoolTargetController::class, 'attachFacilities'])->name('schooltargets.facilities.attach');
+        Route::post('schooltargets/{targetSchool}/facilities', [SchoolTargetController::class, 'storeFacility'])->name('schooltargets.facilities.store');
 
-        Route::get('schooltargets/{schoolTarget}/extracurriculars', [SchoolTargetController::class, 'attachExtracurriculars'])->name('schooltargets.extracurriculars.attach');
-        Route::post('schooltargets/{schoolTarget}/extracurriculars', [SchoolTargetController::class, 'storeExtracurricular'])->name('schooltargets.extracurriculars.store');
+        Route::get('schooltargets/{targetSchool}/extracurriculars', [SchoolTargetController::class, 'attachExtracurriculars'])->name('schooltargets.extracurriculars.attach');
+        Route::post('schooltargets/{targetSchool}/extracurriculars', [SchoolTargetController::class, 'storeExtracurricular'])->name('schooltargets.extracurriculars.store');
     });
 });
