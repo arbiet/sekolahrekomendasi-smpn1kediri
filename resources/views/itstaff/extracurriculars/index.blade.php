@@ -35,7 +35,7 @@
                         <tbody>
                             @foreach($extracurriculars as $activity)
                                 <tr class="hover:bg-gray-200">
-                                    <td>{{ $activity->schoolTarget->name }}</td>
+                                    <td>{{ $activity->targetSchool->name }}</td>
                                     <td>{{ $activity->activity_name }}</td>
                                     <td>{{ $activity->activity_description }}</td>
                                     <td class="space-x-2">

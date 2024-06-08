@@ -3,7 +3,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Attach Facilities to ' . $schoolTarget->name) }}
+            {{ __('Attach Facilities to ' . $targetSchool->name) }}
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('schooltargets.facilities.store', $schoolTarget->id) }}">
+                    <form method="POST" action="{{ route('schooltargets.facilities.store', $targetSchool->id) }}">
                         @csrf
                         <div class="mb-4">
                             <label for="facility_name" class="block text-sm font-medium text-gray-700">
@@ -36,7 +36,7 @@
 
                     <h3 class="mt-6 mb-4 text-lg font-semibold">Attached Facilities</h3>
 
-                    <form method="GET" action="{{ route('schooltargets.facilities.attach', $schoolTarget->id) }}">
+                    <form method="GET" action="{{ route('schooltargets.facilities.attach', $targetSchool->id) }}">
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search facilities..." class="border p-2 rounded">
                         <button type="submit" class="bg-blue-500 text-white p-2 rounded">
                             <i class="fas fa-search"></i> Search

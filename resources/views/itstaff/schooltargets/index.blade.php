@@ -49,14 +49,24 @@
                                     <td>{{ $school->city }}</td>
                                     <td>{{ $school->accreditation }}</td>
                                     <td>
-                                        @foreach($school->facilities as $facility)
-                                            <span class="badge badge-primary">{{ $facility->facility_name }}</span>
-                                        @endforeach
+                                        <div class="flex flex-wrap">
+                                            @foreach($school->facilities->take(2) as $facility)
+                                                <span class="bg-blue-200 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $facility->facility_name }}</span>
+                                            @endforeach
+                                            @if($school->facilities->count() > 2)
+                                                <span class="text-xs text-gray-600">... ({{ $school->facilities->count() }})</span>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td>
-                                        @foreach($school->extracurriculars as $extracurricular)
-                                            <span class="badge badge-primary">{{ $extracurricular->activity_name }}</span>
-                                        @endforeach
+                                        <div class="flex flex-wrap">
+                                            @foreach($school->extracurriculars->take(2) as $extracurricular)
+                                                <span class="bg-green-200 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{{ $extracurricular->activity_name }}</span>
+                                            @endforeach
+                                            @if($school->extracurriculars->count() > 2)
+                                                <span class="text-xs text-gray-600">... ({{ $school->extracurriculars->count() }})</span>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td class="space-x-2">
                                         <a href="{{ route('schooltargets.edit', $school->id) }}" class="bg-yellow-500 text-white p-2 rounded">

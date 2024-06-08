@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('schooltargets.update', $schoolTarget->id) }}">
+                    <form method="POST" action="{{ route('schooltargets.update', $targetSchool->id) }}">
                         @csrf
                         @method('PUT')
 
@@ -17,49 +17,49 @@
                             <label for="name" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-school"></i> Name
                             </label>
-                            <input type="text" name="name" value="{{ $schoolTarget->name }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="text" name="name" value="{{ $targetSchool->name }}" class="mt-1 block w-full border p-2 rounded">
                         </div>
 
                         <div class="mb-4">
                             <label for="address" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-map-marker-alt"></i> Address
                             </label>
-                            <textarea name="address" class="mt-1 block w-full border p-2 rounded">{{ $schoolTarget->address }}</textarea>
+                            <textarea name="address" class="mt-1 block w-full border p-2 rounded">{{ $targetSchool->address }}</textarea>
                         </div>
 
                         <div class="mb-4">
                             <label for="city" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-city"></i> City
                             </label>
-                            <input type="text" name="city" value="{{ $schoolTarget->city }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="text" name="city" value="{{ $targetSchool->city }}" class="mt-1 block w-full border p-2 rounded">
                         </div>
 
                         <div class="mb-4">
                             <label for="accreditation" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-star"></i> Accreditation
                             </label>
-                            <input type="text" name="accreditation" value="{{ $schoolTarget->accreditation }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="text" name="accreditation" value="{{ $targetSchool->accreditation }}" class="mt-1 block w-full border p-2 rounded">
                         </div>
 
                         <div class="mb-4">
                             <label for="website" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-globe"></i> Website
                             </label>
-                            <input type="url" name="website" value="{{ $schoolTarget->website }}" class="mt-1 block w-full border p-2 rounded">
+                            <input type="url" name="website" value="{{ $targetSchool->website }}" class="mt-1 block w-full border p-2 rounded">
                         </div>
 
                         <div class="mb-4">
                             <label for="passing_rate" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-chart-line"></i> Passing Rate
                             </label>
-                            <input type="number" name="passing_rate" value="{{ $schoolTarget->academics->first()->passing_rate ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
+                            <input type="number" name="passing_rate" value="{{ $targetSchool->academics->first()->passing_rate ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
                         </div>
 
                         <div class="mb-4">
                             <label for="average_score" class="block text-sm font-medium text-gray-700">
                                 <i class="fas fa-chart-bar"></i> Average Score
                             </label>
-                            <input type="number" name="average_score" value="{{ $schoolTarget->academics->first()->average_score ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
+                            <input type="number" name="average_score" value="{{ $targetSchool->academics->first()->average_score ?? '' }}" class="mt-1 block w-full border p-2 rounded" step="0.01">
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

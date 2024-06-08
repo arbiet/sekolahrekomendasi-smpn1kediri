@@ -35,7 +35,7 @@
                         <tbody>
                             @foreach($facilities as $facility)
                                 <tr class="hover:bg-gray-200">
-                                    <td>{{ $facility->schoolTarget->name }}</td>
+                                    <td>{{ $facility->targetSchool->name }}</td>
                                     <td>{{ $facility->facility_name }}</td>
                                     <td>{{ $facility->facility_description }}</td>
                                     <td class="space-x-2">

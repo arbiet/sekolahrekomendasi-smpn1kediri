@@ -10,22 +10,22 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="mb-4">
-                        <strong><i class="fas fa-school"></i> Name:</strong> {{ $schoolTarget->name }}
+                        <strong><i class="fas fa-school"></i> Name:</strong> {{ $targetSchool->name }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-map-marker-alt"></i> Address:</strong> {{ $schoolTarget->address }}
+                        <strong><i class="fas fa-map-marker-alt"></i> Address:</strong> {{ $targetSchool->address }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-city"></i> City:</strong> {{ $schoolTarget->city }}
+                        <strong><i class="fas fa-city"></i> City:</strong> {{ $targetSchool->city }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-star"></i> Accreditation:</strong> {{ $schoolTarget->accreditation }}
+                        <strong><i class="fas fa-star"></i> Accreditation:</strong> {{ $targetSchool->accreditation }}
                     </div>
                     <div class="mb-4">
-                        <strong><i class="fas fa-globe"></i> Website:</strong> <a href="{{ $schoolTarget->website }}" target="_blank">{{ $schoolTarget->website }}</a>
+                        <strong><i class="fas fa-globe"></i> Website:</strong> <a href="{{ $targetSchool->website }}" target="_blank">{{ $targetSchool->website }}</a>
                     </div>
                     <div class="mt-4">
-                        <a href="{{ route('schooltargets.edit', $schoolTarget->id) }}" class="bg-yellow-500 text-white p-2 rounded">
+                        <a href="{{ route('schooltargets.edit', $targetSchool->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                             <i class="fas fa-edit"></i> Edit
                         </a>
                     </div>
