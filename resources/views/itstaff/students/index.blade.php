@@ -12,10 +12,18 @@
                     <div class="flex justify-between mb-4">
                         <form method="GET" action="{{ route('students.index') }}">
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search students..." class="border p-2 rounded">
+                            <!-- Add a select dropdown for status filter -->
+                            <select name="status" class="border p-2 rounded">
+                                <option value="">All Status</option>
+                                <option value="active" @if(request('status') == 'active') selected @endif>Active</option>
+                                <option value="graduated" @if(request('status') == 'graduated') selected @endif>Graduated</option>
+                                <option value="dropped" @if(request('status') == 'dropped') selected @endif>Dropped</option>
+                            </select>
                             <button type="submit" class="bg-blue-500 text-white p-2 rounded">
                                 <i class="fas fa-search"></i> Search
                             </button>
                         </form>
+                        <!-- Add the create button -->
                         <a href="{{ route('students.create') }}" class="bg-green-500 text-white p-2 rounded">
                             <i class="fas fa-plus"></i> Add Student
                         </a>
@@ -26,6 +34,9 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Gender</th>
+                                <th>Batch Year</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -34,6 +45,9 @@
                                 <tr class="hover:bg-gray-200">
                                     <td class="cursor-pointer" onclick="window.location='{{ route('students.show', $student->id) }}'">{{ $student->name }}</td>
                                     <td>{{ $student->email }}</td>
+                                    <td>{{ $student->gender }}</td>
+                                    <td>{{ $student->batch_year }}</td>
+                                    <td>{{ $student->status }}</td>
                                     <td class="space-x-2">
                                         <a href="{{ route('students.edit', $student->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                                             <i class="fas fa-edit"></i> Edit

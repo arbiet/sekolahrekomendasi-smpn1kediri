@@ -4,7 +4,7 @@ use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\ExtracurricularController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ITStaffController;
-use App\Http\Controllers\StudentManagementController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\ToSweetAlert;
 
@@ -30,13 +30,13 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
     Route::get('student/dashboard', [StudentController::class, 'index'])->middleware(['auth', 'student']);
 
     Route::middleware(['auth', 'itstaff'])->group(function () {
-        Route::get('students', [StudentManagementController::class, 'index'])->name('students.index');
-        Route::get('students/create', [StudentManagementController::class, 'create'])->name('students.create');
-        Route::post('students', [StudentManagementController::class, 'store'])->name('students.store');
-        Route::get('students/{student}', [StudentManagementController::class, 'show'])->name('students.show');
-        Route::get('students/{student}/edit', [StudentManagementController::class, 'edit'])->name('students.edit');
-        Route::patch('students/{student}', [StudentManagementController::class, 'update'])->name('students.update');
-        Route::delete('students/{student}', [StudentManagementController::class, 'destroy'])->name('students.destroy');
+        Route::get('students', [StudentController::class, 'index'])->name('students.index');
+        Route::get('students/create', [StudentController::class, 'create'])->name('students.create');
+        Route::post('students', [StudentController::class, 'store'])->name('students.store');
+        Route::get('students/{student}', [StudentController::class, 'show'])->name('students.show');
+        Route::get('students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
+        Route::put('students/{student}', [StudentController::class, 'update'])->name('students.update');
+        Route::delete('students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
 
         Route::get('schools', [SchoolController::class, 'index'])->name('schools.index');
         Route::get('schools/create', [SchoolController::class, 'create'])->name('schools.create');
