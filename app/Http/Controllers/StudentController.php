@@ -4,8 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\StudentSchoolChoice;
+use App\Models\StudentGraduatedSchool;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
+
 class StudentController extends Controller
 {
     /**
@@ -15,8 +21,9 @@ class StudentController extends Controller
     {
         $search = $request->input('search');
         $statusFilter = $request->input('status');
+        $currentYear = now()->year;
 
-        $students = Student::query()
+        $students = Student::with('address')
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%$search%")
                     ->orWhere('email', 'like', "%$search%");
@@ -26,7 +33,7 @@ class StudentController extends Controller
             })
             ->paginate(10);
 
-        return view('itstaff.students.index', compact('students', 'search', 'statusFilter'));
+        return view('itstaff.students.index', compact('students', 'search', 'statusFilter', 'currentYear'));
     }
 
     
@@ -43,19 +50,47 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi data input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'gender' => 'required|string|max:10',
+            'batch_year' => 'required|integer',
+            'class' => 'required|string|max:10',
+            'place_of_birth' => 'required|string|max:255',
+            'date_of_birth' => 'required|date',
+            'nisn' => 'required|string|max:20',
+            'phone_number' => 'required|string|max:20',
+            'status' => 'required|string|max:10',
         ]);
 
-        User::create([
+        // Buat user baru
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'usertype' => 'student', // assuming usertype is required and should be 'student'
+            'password' => Hash::make('password'),
+            'usertype' => 'student', // Mengasumsikan usertype adalah 'student'
         ]);
 
+        // Buat data siswa baru yang terhubung dengan user
+        Student::create([
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'gender' => $request->gender,
+            'batch_year' => $request->batch_year,
+            'class' => $request->class,
+            'place_of_birth' => $request->place_of_birth,
+            'date_of_birth' => $request->date_of_birth,
+            'nisn' => $request->nisn,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'status' => $request->status,
+        ]);
+
+        // Tampilkan pesan sukses
         Alert::success('Success', 'Student created successfully');
 
+        // Redirect ke halaman index siswa
         return redirect()->route('students.index');
     }
 
@@ -102,5 +137,14 @@ class StudentController extends Controller
     public function show(User $student)
     {
         return view('itstaff.students.show', compact('student'));
+    }
+    public function addChoice(Student $student)
+    {
+        return view('itstaff.students.add_choice', compact('student'));
+    }
+
+    public function addGraduatedSchool(Student $student)
+    {
+        return view('itstaff.students.add_graduated_school', compact('student'));
     }
 }

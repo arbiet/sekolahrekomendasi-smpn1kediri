@@ -38,6 +38,12 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
         Route::put('students/{student}', [StudentController::class, 'update'])->name('students.update');
         Route::delete('students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
 
+        Route::get('students/{student}/add-choice', [StudentController::class, 'addChoice'])->name('students.addChoice');
+        Route::post('students/{student}/store-choice', [StudentController::class, 'storeChoice'])->name('students.storeChoice');
+
+        Route::get('students/{student}/add-graduated-school', [StudentController::class, 'addGraduatedSchool'])->name('students.addGraduatedSchool');
+        Route::post('students/{student}/store-graduated-school', [StudentController::class, 'storeGraduatedSchool'])->name('students.storeGraduatedSchool');
+
         Route::get('schools', [SchoolController::class, 'index'])->name('schools.index');
         Route::get('schools/create', [SchoolController::class, 'create'])->name('schools.create');
         Route::post('schools', [SchoolController::class, 'store'])->name('schools.store');

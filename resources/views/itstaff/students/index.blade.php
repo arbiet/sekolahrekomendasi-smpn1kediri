@@ -36,6 +36,7 @@
                                 <th>Email</th>
                                 <th>Gender</th>
                                 <th>Batch Year</th>
+                                <th>Address</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -47,7 +48,14 @@
                                     <td>{{ $student->email }}</td>
                                     <td>{{ $student->gender }}</td>
                                     <td>{{ $student->batch_year }}</td>
-                                    <td>{{ $student->status }}</td>
+                                    <td class="p-4">
+                                        @if($student->address)
+                                            {{ Str::limit($student->address->street . ', ' . $student->address->subdistrict . ', ' . $student->address->district . ', ' . $student->address->city . ', ' . $student->address->province . ', ' . $student->address->postal_code, 15, '...') }}
+                                        @else
+                                            No Address
+                                        @endif
+                                    </td>
+                                    <td>{{ ucfirst($student->status) }}</td>
                                     <td class="space-x-2">
                                         <a href="{{ route('students.edit', $student->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                                             <i class="fas fa-edit"></i> Edit
@@ -59,11 +67,28 @@
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                    
+                                        @php
+                                            $currentYear = \Carbon\Carbon::now()->year;
+                                        @endphp
+                    
+                                        @if($student->status == 'active' && ($currentYear - $student->batch_year) == 3 && !$student->schoolChoices)
+                                            <a href="{{ route('students.addChoice', $student->id) }}" class="bg-blue-500 text-white p-2 rounded">
+                                                <i class="fas fa-plus"></i> Add School Choice
+                                            </a>
+                                        @endif
+                    
+                                        @if($student->status == 'graduated' && !$student->graduatedSchool)
+                                            <a href="{{ route('students.addGraduatedSchool', $student->id) }}" class="bg-green-500 text-white p-2 rounded">
+                                                <i class="fas fa-plus"></i> Add Graduated School
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    
 
                     <div class="mt-4">
                         {{ $students->links() }}
