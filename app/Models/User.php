@@ -44,4 +44,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->usertype === 'admin';
+    }
+
+    public function isITStaff(): bool
+    {
+        return $this->usertype === 'itstaff';
+    }
+    public function isStudent(): bool
+    {
+        return $this->usertype === 'student';
+    }
 }

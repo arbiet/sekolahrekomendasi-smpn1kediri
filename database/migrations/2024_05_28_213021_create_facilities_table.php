@@ -9,7 +9,7 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_school_id')->constrained('target_schools')->onDelete('cascade');
+            $table->foreignId('target_school_id')->constrained('schools')->onDelete('cascade');
             $table->string('facility_name');
             $table->text('facility_description')->nullable();
             $table->timestamps();

@@ -30,7 +30,7 @@ class ExtracurricularController extends Controller
         $request->validate([
             'activity_name' => 'required',
             'activity_description' => 'required',
-            'school_target_id' => 'required|exists:target_schools,id',
+            'school_target_id' => 'required|exists:schools,id',
         ]);
 
         Extracurricular::create($request->all());
@@ -50,7 +50,7 @@ class ExtracurricularController extends Controller
         $request->validate([
             'activity_name' => 'required',
             'activity_description' => 'required',
-            'school_target_id' => 'required|exists:target_schools,id',
+            'school_target_id' => 'required|exists:schools,id',
         ]);
 
         $extracurricular->update($request->all());

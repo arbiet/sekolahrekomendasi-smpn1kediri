@@ -13,7 +13,13 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @livewireStyles
+        {{-- @livewireStyles --}}
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100" id="app">
@@ -34,6 +40,6 @@
             </main>
             @include('sweetalert::alert')
         </div>
-        @livewireScripts
+        {{-- @livewireScripts --}}
     </body>
 </html>

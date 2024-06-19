@@ -9,6 +9,7 @@ use App\Models\StudentAddress;
 use App\Models\StudentAchievement;
 use App\Models\StudentSchoolChoice;
 use App\Models\StudentGraduatedSchool;
+use App\Models\StudentFinalScore;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
@@ -67,28 +68,51 @@ class StudentSeeder extends Seeder
                     'longitude' => $faker->longitude($lng_range[0], $lng_range[1]),
                 ]);
 
-                for ($i = 1; $i <= 5; $i++) {
-                    StudentAchievement::create([
-                        'student_id' => $student->id,
-                        'achievement_type' => $faker->randomElement(['academic', 'non-academic']),
-                        'activity_name' => $faker->sentence,
-                        'level' => $faker->randomElement(['school', 'district', 'province', 'national', 'international']),
-                        'achievement' => $faker->randomElement(['First Place', 'Second Place', 'Third Place', 'Other']),
-                        'achievement_year' => $faker->year,
-                    ]);
+                // Determine if the student has achievements and how many
+                if ($faker->boolean(15)) { // 15% chance to have achievements
+                    $achievementCount = $faker->numberBetween(1, 3);
+                    for ($i = 0; $i < $achievementCount; $i++) {
+                        StudentAchievement::create([
+                            'student_id' => $student->id,
+                            'achievement_type' => $faker->randomElement(['academic', 'non-academic']),
+                            'activity_name' => $faker->sentence,
+                            'level' => $faker->randomElement(['school', 'district', 'province', 'national', 'international']),
+                            'achievement' => $faker->randomElement(['First Place', 'Second Place', 'Third Place', 'Other']),
+                            'achievement_year' => $faker->year,
+                        ]);
+                    }
                 }
+
+                $first_choice = $faker->randomElement($schools);
+                $second_choice = $faker->randomElement($schools);
+                $third_choice = $faker->randomElement($schools);
+                $selected_school = $faker->randomElement([$first_choice, $second_choice, $third_choice]);
+                $accepted_school = $faker->randomElement([$selected_school, $faker->randomElement($schools)]);
 
                 StudentSchoolChoice::create([
                     'student_id' => $student->id,
-                    'first_choice' => $faker->randomElement($schools),
-                    'second_choice' => $faker->randomElement($schools),
-                    'third_choice' => $faker->randomElement($schools),
+                    'first_choice' => $first_choice,
+                    'second_choice' => $second_choice,
+                    'third_choice' => $third_choice,
                 ]);
 
                 StudentGraduatedSchool::create([
                     'student_id' => $student->id,
-                    'selected_school' => $faker->randomElement($schools),
-                    'accepted_school' => $faker->randomElement($schools),
+                    'selected_school' => $selected_school,
+                    'accepted_school' => $accepted_school,
+                ]);
+
+                StudentFinalScore::create([
+                    'student_id' => $student->id,
+                    'mathematics' => $faker->numberBetween(76, 100),
+                    'science' => $faker->numberBetween(76, 100),
+                    'english' => $faker->numberBetween(76, 100),
+                    'indonesian' => $faker->numberBetween(76, 100),
+                    'civics' => $faker->numberBetween(76, 100),
+                    'religion' => $faker->numberBetween(76, 100),
+                    'physical_education' => $faker->numberBetween(76, 100),
+                    'arts_and_crafts' => $faker->numberBetween(76, 100),
+                    'local_content' => $faker->numberBetween(76, 100),
                 ]);
             }
         }
@@ -127,22 +151,51 @@ class StudentSeeder extends Seeder
                 'longitude' => $faker->longitude($lng_range[0], $lng_range[1]),
             ]);
 
-            for ($i = 1; $i <= 5; $i++) {
-                StudentAchievement::create([
-                    'student_id' => $student->id,
-                    'achievement_type' => $faker->randomElement(['academic', 'non-academic']),
-                    'activity_name' => $faker->sentence,
-                    'level' => $faker->randomElement(['school', 'district', 'province', 'national', 'international']),
-                    'achievement' => $faker->randomElement(['First Place', 'Second Place', 'Third Place', 'Other']),
-                    'achievement_year' => $faker->year,
-                ]);
+            // Determine if the student has achievements and how many
+            if ($faker->boolean(15)) { // 15% chance to have achievements
+                $achievementCount = $faker->numberBetween(1, 3);
+                for ($i = 0; $i < $achievementCount; $i++) {
+                    StudentAchievement::create([
+                        'student_id' => $student->id,
+                        'achievement_type' => $faker->randomElement(['academic', 'non-academic']),
+                        'activity_name' => $faker->sentence,
+                        'level' => $faker->randomElement(['school', 'district', 'province', 'national', 'international']),
+                        'achievement' => $faker->randomElement(['First Place', 'Second Place', 'Third Place', 'Other']),
+                        'achievement_year' => $faker->year,
+                    ]);
+                }
             }
+
+            $first_choice = $faker->randomElement($schools);
+            $second_choice = $faker->randomElement($schools);
+            $third_choice = $faker->randomElement($schools);
+            $selected_school = $faker->randomElement([$first_choice, $second_choice, $third_choice]);
+            $accepted_school = $faker->randomElement([$selected_school, $faker->randomElement($schools)]);
 
             StudentSchoolChoice::create([
                 'student_id' => $student->id,
-                'first_choice' => $faker->randomElement($schools),
-                'second_choice' => $faker->randomElement($schools),
-                'third_choice' => $faker->randomElement($schools),
+                'first_choice' => $first_choice,
+                'second_choice' => $second_choice,
+                'third_choice' => $third_choice,
+            ]);
+
+            StudentGraduatedSchool::create([
+                'student_id' => $student->id,
+                'selected_school' => $selected_school,
+                'accepted_school' => $accepted_school,
+            ]);
+
+            StudentFinalScore::create([
+                'student_id' => $student->id,
+                'mathematics' => $faker->numberBetween(76, 100),
+                'science' => $faker->numberBetween(76, 100),
+                'english' => $faker->numberBetween(76, 100),
+                'indonesian' => $faker->numberBetween(76, 100),
+                'civics' => $faker->numberBetween(76, 100),
+                'religion' => $faker->numberBetween(76, 100),
+                'physical_education' => $faker->numberBetween(76, 100),
+                'arts_and_crafts' => $faker->numberBetween(76, 100),
+                'local_content' => $faker->numberBetween(76, 100),
             ]);
         }
     }

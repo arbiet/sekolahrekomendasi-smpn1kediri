@@ -9,7 +9,7 @@ class CreateExtracurricularsTable extends Migration
     {
         Schema::create('extracurriculars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_school_id')->constrained('target_schools')->onDelete('cascade');
+            $table->foreignId('target_school_id')->constrained('schools')->onDelete('cascade');
             $table->string('activity_name');
             $table->text('activity_description')->nullable();
             $table->timestamps();

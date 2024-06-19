@@ -33,18 +33,38 @@ class Student extends Model
         return $this->hasMany(StudentAchievement::class);
     }
 
-    public function finalScores()
+    public function finalScore()
     {
-        return $this->hasMany(StudentFinalScore::class);
+        return $this->hasOne(StudentFinalScore::class);
     }
 
-    public function schoolChoices()
+    public function schoolChoice()
     {
-        return $this->hasMany(StudentSchoolChoice::class);
+        return $this->hasOne(StudentSchoolChoice::class);
     }
 
     public function graduatedSchool()
     {
         return $this->hasOne(StudentGraduatedSchool::class);
     }
+
+    public function getAverageScoreAttribute()
+    {
+        if ($this->finalScore) {
+            $totalScore = $this->finalScore->mathematics
+                         + $this->finalScore->science
+                         + $this->finalScore->english
+                         + $this->finalScore->indonesian
+                         + $this->finalScore->civics
+                         + $this->finalScore->religion
+                         + $this->finalScore->physical_education
+                         + $this->finalScore->arts_and_crafts
+                         + $this->finalScore->local_content;
+
+            return $totalScore / 9;
+        }
+
+        return null;
+    }
 }
+    

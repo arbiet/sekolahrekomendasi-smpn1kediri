@@ -14,7 +14,7 @@ class FacilitiesSeeder extends Seeder
             'Computer Room', 'Music Room', 'Art Room', 'Science Lab', 'Medical Room'
         ];
 
-        $schools = DB::table('schools')->get(); // Mengubah target_schools menjadi schools
+        $schools = DB::table('schools')->get(); // Mengubah schools menjadi schools
 
         foreach ($schools as $school) {
             foreach ($facilities as $facility) {

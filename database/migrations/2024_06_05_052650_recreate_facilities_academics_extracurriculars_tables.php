@@ -66,7 +66,7 @@ class RecreateFacilitiesAcademicsExtracurricularsTables extends Migration
         // Recreate old tables
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_school_id')->constrained('target_schools')->onDelete('cascade');
+            $table->foreignId('target_school_id')->constrained('schools')->onDelete('cascade');
             $table->string('facility_name');
             $table->text('facility_description')->nullable();
             $table->timestamps();
@@ -74,7 +74,7 @@ class RecreateFacilitiesAcademicsExtracurricularsTables extends Migration
 
         Schema::create('academics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_school_id')->constrained('target_schools')->onDelete('cascade');
+            $table->foreignId('target_school_id')->constrained('schools')->onDelete('cascade');
             $table->decimal('passing_rate', 5, 2);
             $table->decimal('average_score', 5, 2);
             $table->timestamps();
@@ -82,7 +82,7 @@ class RecreateFacilitiesAcademicsExtracurricularsTables extends Migration
 
         Schema::create('extracurriculars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_school_id')->constrained('target_schools')->onDelete('cascade');
+            $table->foreignId('target_school_id')->constrained('schools')->onDelete('cascade');
             $table->string('activity_name');
             $table->text('activity_description')->nullable();
             $table->timestamps();

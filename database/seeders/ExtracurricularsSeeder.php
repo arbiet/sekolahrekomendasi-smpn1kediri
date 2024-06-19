@@ -14,7 +14,7 @@ class ExtracurricularsSeeder extends Seeder
             'Drama Club', 'Science Club', 'Math Club', 'Debate Club', 'Photography Club'
         ];
 
-        $schools = DB::table('schools')->get(); // Mengubah target_schools menjadi schools
+        $schools = DB::table('schools')->get(); // Mengubah schools menjadi schools
 
         foreach ($schools as $school) {
             foreach ($extracurriculars as $activity) {

@@ -9,7 +9,7 @@ class CreateAcademicsTable extends Migration
     {
         Schema::create('academics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_school_id')->constrained('target_schools')->onDelete('cascade');
+            $table->foreignId('target_school_id')->constrained('schools')->onDelete('cascade');
             $table->decimal('passing_rate', 5, 2);
             $table->decimal('average_score', 5, 2);
             $table->timestamps();

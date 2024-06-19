@@ -30,7 +30,7 @@ class FacilityController extends Controller
         $request->validate([
             'facility_name' => 'required',
             'facility_description' => 'required',
-            'school_target_id' => 'required|exists:target_schools,id',
+            'school_target_id' => 'required|exists:schools,id',
         ]);
 
         Facility::create($request->all());
@@ -50,7 +50,7 @@ class FacilityController extends Controller
         $request->validate([
             'facility_name' => 'required',
             'facility_description' => 'required',
-            'school_target_id' => 'required|exists:target_schools,id',
+            'school_target_id' => 'required|exists:schools,id',
         ]);
 
         $facility->update($request->all());

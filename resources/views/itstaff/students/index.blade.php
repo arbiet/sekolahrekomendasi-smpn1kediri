@@ -12,7 +12,6 @@
                     <div class="flex justify-between mb-4">
                         <form method="GET" action="{{ route('students.index') }}">
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search students..." class="border p-2 rounded">
-                            <!-- Add a select dropdown for status filter -->
                             <select name="status" class="border p-2 rounded">
                                 <option value="">All Status</option>
                                 <option value="active" @if(request('status') == 'active') selected @endif>Active</option>
@@ -23,7 +22,6 @@
                                 <i class="fas fa-search"></i> Search
                             </button>
                         </form>
-                        <!-- Add the create button -->
                         <a href="{{ route('students.create') }}" class="bg-green-500 text-white p-2 rounded">
                             <i class="fas fa-plus"></i> Add Student
                         </a>
@@ -38,6 +36,7 @@
                                 <th>Batch Year</th>
                                 <th>Address</th>
                                 <th>Status</th>
+                                <th>Missing Info</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -56,6 +55,25 @@
                                         @endif
                                     </td>
                                     <td>{{ ucfirst($student->status) }}</td>
+                                    <td>
+                                        @php
+                                            $missingInfo = [];
+                                            if (!$student->address) $missingInfo[] = 'Address';
+                                                if (!$student->finalScore) $missingInfo[] = 'Final Scores';
+                                            if (!$student->schoolChoice) $missingInfo[] = 'School Choices';
+                                            if ($student->status == 'graduated' && !$student->graduatedSchool) $missingInfo[] = 'Graduated School';
+                                        @endphp
+                                        @if (!empty($missingInfo))
+                                            <div class="relative group">
+                                                <i class="fas fa-info-circle text-red-500"></i>
+                                                <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-700 text-white text-xs rounded py-1 px-2">
+                                                    {{ implode(', ', $missingInfo) }}
+                                                </div>
+                                            </div>
+                                        @else
+                                            <i class="fas fa-check-circle text-green-500"></i>
+                                        @endif
+                                    </td>
                                     <td class="space-x-2">
                                         <a href="{{ route('students.edit', $student->id) }}" class="bg-yellow-500 text-white p-2 rounded">
                                             <i class="fas fa-edit"></i> Edit
@@ -67,28 +85,11 @@
                                             @csrf
                                             @method('DELETE')
                                         </form>
-                    
-                                        @php
-                                            $currentYear = \Carbon\Carbon::now()->year;
-                                        @endphp
-                    
-                                        @if($student->status == 'active' && ($currentYear - $student->batch_year) == 3 && !$student->schoolChoices)
-                                            <a href="{{ route('students.addChoice', $student->id) }}" class="bg-blue-500 text-white p-2 rounded">
-                                                <i class="fas fa-plus"></i> Add School Choice
-                                            </a>
-                                        @endif
-                    
-                                        @if($student->status == 'graduated' && !$student->graduatedSchool)
-                                            <a href="{{ route('students.addGraduatedSchool', $student->id) }}" class="bg-green-500 text-white p-2 rounded">
-                                                <i class="fas fa-plus"></i> Add Graduated School
-                                            </a>
-                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    
 
                     <div class="mt-4">
                         {{ $students->links() }}
