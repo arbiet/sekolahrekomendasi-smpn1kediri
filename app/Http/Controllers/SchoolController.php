@@ -47,6 +47,8 @@ class SchoolController extends Controller
             'city' => 'required|string|max:255',
             'accreditation' => 'required|string|max:255',
             'website' => 'nullable|string|url|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'passing_rate' => 'nullable|numeric|min:0|max:100',
             'average_score' => 'nullable|numeric|min:0|max:100',
         ]);
@@ -85,6 +87,8 @@ class SchoolController extends Controller
             'city' => 'required|string|max:255',
             'accreditation' => 'required|string|max:255',
             'website' => 'nullable|string|url|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'passing_rate' => 'nullable|numeric|min:0|max:100',
             'average_score' => 'nullable|numeric|min:0|max:100',
         ]);

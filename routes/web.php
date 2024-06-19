@@ -43,7 +43,10 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
     });
 
     Route::middleware(['auth', 'itstaff'])->prefix('itstaff')->group(function () {
-        Route::post('/calculate-saw', [SchoolDecisionController::class, 'calculateSAW']);
+        Route::match(['get', 'post'], '/calculate-saw', [SchoolDecisionController::class, 'calculateSAW'])->name('calculate-saw');
+        Route::get('/student-details/{id}', [SchoolDecisionController::class, 'getStudentDetails']);
+        Route::post('/check-probability', [SchoolDecisionController::class, 'checkProbability']);
+
         Route::get('/dashboard', [ITStaffController::class, 'index'])->name('itstaff.dashboard.index');
         Route::get('students', [StudentController::class, 'index'])->name('students.index');
         Route::get('students/create', [StudentController::class, 'create'])->name('students.create');

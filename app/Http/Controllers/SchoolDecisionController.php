@@ -3,74 +3,135 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\StudentAchievement;
-use App\Models\StudentSchoolChoice;
-use App\Models\StudentAddress;
+use App\Models\School;
 use App\Models\Criteria;
+use App\Models\Student;
 
 class SchoolDecisionController extends Controller
 {
-    public function calculateSAW(Request $request)
+    public function calculateSAW()
     {
+        // Fetch data from the database
+        $schools = School::all();
         $criteria = Criteria::all();
-        $studentAchievements = StudentAchievement::all();
-        $studentSchoolChoices = StudentSchoolChoice::all();
-        $studentAddresses = StudentAddress::all();
+        $students = Student::all();
 
-        // Inisialisasi hasil perhitungan
-        $results = [];
+        // Initialize arrays to hold criteria values
+        $C1 = [];
+        $C2 = [];
+        $C3 = [];
+        $C4 = [];
+        $C5 = [];
 
-        // Normalisasi data
-        foreach ($studentAchievements as $achievement) {
-            $normalized = [];
-            foreach ($criteria as $criterion) {
-                switch ($criterion->name) {
-                    case 'C1':
-                        $value = $achievement->average_score;
-                        $max = StudentAchievement::max('average_score');
-                        break;
-                    case 'C2':
-                        $value = $achievement->lowest_score;
-                        $max = StudentAchievement::max('lowest_score');
-                        break;
-                    case 'C3':
-                        $value = $achievement->academic_route ? 1 : 0;
-                        $max = 1;
-                        break;
-                    case 'C4':
-                        $value = $achievement->non_academic_route ? 1 : 0;
-                        $max = 1;
-                        break;
-                    case 'C5':
-                        $address = $studentAddresses->firstWhere('student_id', $achievement->student_id);
-                        $value = $address->distance;
-                        $max = StudentAddress::max('distance');
-                        break;
-                    default:
-                        $value = 0;
-                        $max = 1;
-                        break;
-                }
-                $normalized[$criterion->name] = $value / $max;
-            }
-            $results[$achievement->student_id] = $normalized;
+        // Initialize array to hold performance ratings and preference values
+        $performanceRatings = [];
+        $preferenceValues = [];
+
+        // Calculate criteria values and performance ratings
+        foreach ($schools as $school) {
+            $C1[] = $this->calculateC1($school);
+            $C2[] = $this->calculateC2($school);
+            $C3[] = $this->calculateC3($school);
+            $C4[] = $this->calculateC4($school);
+            $C5[] = $this->calculateC5($school);
+
+            $performanceRatings[] = $school->getPerformanceRatings();
         }
 
-        // Menghitung nilai akhir
-        foreach ($results as $student_id => $normalized) {
-            $finalScore = 0;
-            foreach ($criteria as $criterion) {
-                $finalScore += $normalized[$criterion->name] * $criterion->weight;
-            }
-            $results[$student_id]['final_score'] = $finalScore;
+        // Calculate preference values (Vi) and sort schools by Vi
+        foreach ($performanceRatings as $index => $ratings) {
+            $Vi = round(array_sum($ratings), 2);
+            $schools[$index]->preference_value = $Vi;
+            $preferenceValues[] = $Vi;
         }
 
-        // Mengurutkan hasil berdasarkan nilai akhir
-        usort($results, function($a, $b) {
-            return $b['final_score'] <=> $a['final_score'];
-        });
+        // Sort schools by preference_value in descending order
+        $schoolsSorted = $schools->sortByDesc('preference_value')->values();
 
-        // Mengembalikan hasil dalam bentuk JSON atau ke view
-        return response()->json($results);
+        // Combine results (for now, we'll just pass them to the view)
+        return view('itstaff.saw.calculate-saw', compact('schools', 'C1', 'C2', 'C3', 'C4', 'C5', 'performanceRatings', 'preferenceValues', 'schoolsSorted', 'students'));
+    }
+
+    private function calculateC1($school)
+    {
+        return round($school->average_school_score, 2);
+    }
+
+    private function calculateC2($school)
+    {
+        return round($school->lowest_accepted_score, 2);
+    }
+
+    private function calculateC3($school)
+    {
+        return round($school->academic_path_percentage, 2);
+    }
+
+    private function calculateC4($school)
+    {
+        return round($school->non_academic_path_percentage, 2);
+    }
+
+    private function calculateC5($school)
+    {
+        return round($school->average_distance, 2);
+    }
+
+    public function getStudentDetails($id)
+    {
+        $student = Student::with(['address', 'achievements', 'finalScore', 'schoolChoice', 'graduatedSchool'])->findOrFail($id);
+        return response()->json($student);
+    }
+
+    public function checkProbability(Request $request)
+    {
+        $studentId = $request->input('student');
+        $student = Student::with(['address', 'achievements', 'finalScore', 'schoolChoice'])->findOrFail($studentId);
+
+        // Initialize weights
+        $weights = [
+            'C1' => 0.45,
+            'C2' => 0.25,
+            'C3' => 0.15,
+            'C4' => 0.10,
+            'C5' => 0.05
+        ];
+
+        // Initialize probabilities for each school choice
+        $probabilities = [
+            'first_choice' => 0,
+            'second_choice' => 0,
+            'third_choice' => 0
+        ];
+
+        // Get student's average score
+        $averageScore = ($student->finalScore->mathematics + $student->finalScore->science + $student->finalScore->english + $student->finalScore->indonesian + $student->finalScore->civics) / 5;
+
+        // Get sorted schools by preference value
+        $schoolsSorted = School::orderByDesc('preference_value')->get();
+
+        foreach (['first_choice', 'second_choice', 'third_choice'] as $choice) {
+            $school = School::where('name', $student->schoolChoice->$choice)->first();
+
+            if ($school) {
+                $C1 = $averageScore > $school->average_school_score ? 1 : 0;
+                $C2 = $averageScore > $school->lowest_accepted_score ? 1 : 0;
+                $C3 = $student->achievements->count() > 0 ? 1 : 0;
+                $C4 = $student->achievements->count() == 0 ? 1 : 0;
+                $C5 = $student->address->distance_to_school <= $school->average_distance ? 1 : 0;
+
+                $baseProbability = ($C1 * $weights['C1']) + ($C2 * $weights['C2']) + ($C3 * $weights['C3']) + ($C4 * $weights['C4']) + ($C5 * $weights['C5']);
+
+                // Adjust probability based on school ranking
+                $rank = $schoolsSorted->search(function ($sortedSchool) use ($school) {
+                    return $sortedSchool->id == $school->id;
+                });
+
+                $rankAdjustment = 0.10 - ($rank * 0.02);
+                $probabilities[$choice] = max(0, $baseProbability + $rankAdjustment);
+            }
+        }
+
+        return response()->json($probabilities);
     }
 }

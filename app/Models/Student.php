@@ -66,5 +66,9 @@ class Student extends Model
 
         return null;
     }
+
+    public function hasAchievement()
+    {
+        return $this->achievements->isNotEmpty();
+    }
 }
-    

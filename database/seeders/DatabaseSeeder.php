@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FacilitiesSeeder::class);
         $this->call(ExtracurricularsSeeder::class);
         $this->call(StudentSeeder::class);
+        $this->call(CriteriaSeeder::class);
     }
 }

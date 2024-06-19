@@ -22,6 +22,9 @@
                         <x-nav-link :href="route('schools.index')" :active="request()->routeIs('schools.index')">
                             {{ __('School Target Management') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('calculate-saw')" :active="request()->routeIs('calculate-saw')">
+                            {{ __('Calculate SAW') }}
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -84,6 +87,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('schools.index')" :active="request()->routeIs('schools.index')">
                     {{ __('School Target Management') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('calculate-saw')" :active="request()->routeIs('calculate-saw')">
+                    {{ __('Calculate SAW') }}
                 </x-responsive-nav-link>
             @endif
         </div>
