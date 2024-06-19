@@ -28,11 +28,14 @@
                        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}"
-                       class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300">Login</a>
-                    @if (Route::has('register'))
+                       class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 space-x-2">
+                       <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Login</span>
+                    </a>
+                    {{-- @if (Route::has('register'))
                         <a href="{{ route('register') }}"
                            class="ml-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300">Register</a>
-                    @endif
+                    @endif --}}
                 @endauth
             </div>
         @endif
