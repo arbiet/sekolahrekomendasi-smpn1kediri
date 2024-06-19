@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\School;
 use App\Models\StudentAddress;
 use App\Models\StudentAchievement;
 use App\Models\StudentFinalScore;
@@ -12,9 +13,61 @@ use App\Models\StudentGraduatedSchool;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
+
+    public function studentIndex()
+    {
+        $student = Student::with(['address', 'achievements', 'finalScore', 'schoolChoice'])->findOrFail(Auth::id());
+
+        // Initialize weights
+        $weights = [
+            'C1' => 0.45,
+            'C2' => 0.25,
+            'C3' => 0.15,
+            'C4' => 0.10,
+            'C5' => 0.05
+        ];
+
+        // Initialize probabilities for each school choice
+        $probabilities = [
+            'first_choice' => 0,
+            'second_choice' => 0,
+            'third_choice' => 0
+        ];
+
+        // Get student's average score
+        $averageScore = ($student->finalScore->mathematics + $student->finalScore->science + $student->finalScore->english + $student->finalScore->indonesian + $student->finalScore->civics) / 5;
+
+        // Get sorted schools by preference value
+        $schoolsSorted = School::orderByDesc('preference_value')->get();
+
+        foreach (['first_choice', 'second_choice', 'third_choice'] as $choice) {
+            $school = School::where('name', $student->schoolChoice->$choice)->first();
+
+            if ($school) {
+                $C1 = $averageScore > $school->average_school_score ? 1 : 0;
+                $C2 = $averageScore > $school->lowest_accepted_score ? 1 : 0;
+                $C3 = $student->achievements->count() > 0 ? 1 : 0;
+                $C4 = $student->achievements->count() == 0 ? 1 : 0;
+                $C5 = $student->address->distance_to_school <= $school->average_distance ? 1 : 0;
+
+                $baseProbability = ($C1 * $weights['C1']) + ($C2 * $weights['C2']) + ($C3 * $weights['C3']) + ($C4 * $weights['C4']) + ($C5 * $weights['C5']);
+
+                // Adjust probability based on school ranking
+                $rank = $schoolsSorted->search(function ($sortedSchool) use ($school) {
+                    return $sortedSchool->id == $school->id;
+                });
+
+                $rankAdjustment = 0.10 - ($rank * 0.02);
+                $probabilities[$choice] = max(0, $baseProbability + $rankAdjustment);
+            }
+        }
+
+        return view('student.dashboard', compact('student', 'probabilities'));
+    }
     /**
      * Display a listing of the students.
      */

@@ -32,9 +32,7 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
                 return redirect()->route('itstaff.dashboard.index');
             } elseif ($user->usertype === 'student') {
                 return redirect()->route('student.dashboard.index');
-            } else {
-                return view('dashboard');
-            }
+            } 
         })->name('dashboard');
     });
 
@@ -106,6 +104,6 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
     });
 
     Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
-        Route::get('/dashboard', [StudentController::class, 'index'])->name('student.dashboard.index');
+        Route::get('/dashboard', [StudentController::class, 'studentindex'])->name('student.dashboard.index');
     });
 });
