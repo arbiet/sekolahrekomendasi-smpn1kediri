@@ -183,4 +183,17 @@ class School extends Model
 
         return $ratings;
     }
+    public function getPerformanceRatingsAttribute()
+    {
+        $ratings = [
+            'C1' => round($this->average_school_score * 0.45, 2),
+            'C2' => round($this->lowest_accepted_score * 0.25, 2),
+            'C3' => round($this->academic_path_percentage * 0.15, 2),
+            'C4' => round($this->non_academic_path_percentage * 0.10, 2),
+            'C5' => round($this->average_distance * 0.05, 2),
+        ];
+
+        return $ratings;
+    }
+
 }

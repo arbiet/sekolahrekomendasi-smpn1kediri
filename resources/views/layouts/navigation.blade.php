@@ -26,6 +26,12 @@
                             {{ __('Calculate SAW') }}
                         </x-nav-link>
                     @endif
+                    @if(Auth::user()->usertype === 'student')
+                        <x-nav-link :href="route('student.choose.schools')" :active="request()->routeIs('student.choose.schools')">
+                            {{ __('Choose Schools') }}
+                        </x-nav-link>
+                    @endif
+
                 </div>
             </div>
 
@@ -92,6 +98,12 @@
                     {{ __('Calculate SAW') }}
                 </x-responsive-nav-link>
             @endif
+            @if(Auth::user()->usertype === 'student')
+                <x-responsive-nav-link :href="route('student.choose.schools')" :active="request()->routeIs('student.choose.schools')">
+                    {{ __('Choose Schools') }}
+                </x-responsive-nav-link>
+            @endif
+
         </div>
 
         <!-- Responsive Settings Options -->

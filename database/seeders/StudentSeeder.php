@@ -83,24 +83,31 @@ class StudentSeeder extends Seeder
                     }
                 }
 
-                $first_choice = $faker->randomElement($schools);
-                $second_choice = $faker->randomElement($schools);
-                $third_choice = $faker->randomElement($schools);
+                do {
+                    $first_choice = $faker->randomElement($schools);
+                    $second_choice = $faker->randomElement($schools);
+                    $third_choice = $faker->randomElement($schools);
+                } while ($first_choice === $second_choice || $second_choice === $third_choice || $first_choice === $third_choice);
+
                 $selected_school = $faker->randomElement([$first_choice, $second_choice, $third_choice]);
                 $accepted_school = $faker->randomElement([$selected_school, $faker->randomElement($schools)]);
 
-                StudentSchoolChoice::create([
-                    'student_id' => $student->id,
-                    'first_choice' => $first_choice,
-                    'second_choice' => $second_choice,
-                    'third_choice' => $third_choice,
-                ]);
+                StudentSchoolChoice::updateOrCreate(
+                    ['student_id' => $student->id],
+                    [
+                        'first_choice' => $first_choice,
+                        'second_choice' => $second_choice,
+                        'third_choice' => $third_choice,
+                    ]
+                );
 
-                StudentGraduatedSchool::create([
-                    'student_id' => $student->id,
-                    'selected_school' => $selected_school,
-                    'accepted_school' => $accepted_school,
-                ]);
+                if ($student->status === 'graduated') {
+                    StudentGraduatedSchool::create([
+                        'student_id' => $student->id,
+                        'selected_school' => $selected_school,
+                        'accepted_school' => $accepted_school,
+                    ]);
+                }
 
                 StudentFinalScore::create([
                     'student_id' => $student->id,
@@ -166,24 +173,31 @@ class StudentSeeder extends Seeder
                 }
             }
 
-            $first_choice = $faker->randomElement($schools);
-            $second_choice = $faker->randomElement($schools);
-            $third_choice = $faker->randomElement($schools);
+            do {
+                $first_choice = $faker->randomElement($schools);
+                $second_choice = $faker->randomElement($schools);
+                $third_choice = $faker->randomElement($schools);
+            } while ($first_choice === $second_choice || $second_choice === $third_choice || $first_choice === $third_choice);
+
             $selected_school = $faker->randomElement([$first_choice, $second_choice, $third_choice]);
             $accepted_school = $faker->randomElement([$selected_school, $faker->randomElement($schools)]);
 
-            StudentSchoolChoice::create([
-                'student_id' => $student->id,
-                'first_choice' => $first_choice,
-                'second_choice' => $second_choice,
-                'third_choice' => $third_choice,
-            ]);
+            StudentSchoolChoice::updateOrCreate(
+                ['student_id' => $student->id],
+                [
+                    'first_choice' => $first_choice,
+                    'second_choice' => $second_choice,
+                    'third_choice' => $third_choice,
+                ]
+            );
 
-            StudentGraduatedSchool::create([
-                'student_id' => $student->id,
-                'selected_school' => $selected_school,
-                'accepted_school' => $accepted_school,
-            ]);
+            if ($student->status === 'graduated') {
+                StudentGraduatedSchool::create([
+                    'student_id' => $student->id,
+                    'selected_school' => $selected_school,
+                    'accepted_school' => $accepted_school,
+                ]);
+            }
 
             StudentFinalScore::create([
                 'student_id' => $student->id,

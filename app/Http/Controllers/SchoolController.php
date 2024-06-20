@@ -11,6 +11,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SchoolController extends Controller
 {
+    public function showJson($id)
+    {
+        $school = School::with(['facilities', 'extracurriculars', 'graduatedStudents'])->findOrFail($id);
+        
+        $school->performance_ratings = $school->getPerformanceRatings();
+
+        return response()->json($school);
+    }
     /**
      * Display a listing of the schools.
      */

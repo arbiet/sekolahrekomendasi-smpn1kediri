@@ -10,6 +10,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\ToSweetAlert;
 use App\Http\Controllers\SchoolDecisionController;
+use App\Http\Controllers\SchoolChoiceController;
+
 
 require __DIR__.'/auth.php';
 
@@ -17,6 +19,8 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
     Route::get('/', function () {
         return view('welcome');
     });
+    Route::get('/schools/json/{id}', [SchoolController::class, 'showJson']);
+
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -43,7 +47,8 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
     Route::middleware(['auth', 'itstaff'])->prefix('itstaff')->group(function () {
         Route::match(['get', 'post'], '/calculate-saw', [SchoolDecisionController::class, 'calculateSAW'])->name('calculate-saw');
         Route::get('/student-details/{id}', [SchoolDecisionController::class, 'getStudentDetails']);
-        Route::post('/check-probability', [SchoolDecisionController::class, 'checkProbability']);
+        Route::post('/check-probability', [SchoolDecisionController::class, 'checkProbability'])->name('check-probability');
+        Route::get('/check-probability-index', [SchoolDecisionController::class, 'indexProbability'])->name('check-probability.index');
 
         Route::get('/dashboard', [ITStaffController::class, 'index'])->name('itstaff.dashboard.index');
         Route::get('students', [StudentController::class, 'index'])->name('students.index');
@@ -99,11 +104,15 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
         Route::put('students/{student}/update-address', [StudentController::class, 'updateAddress'])->name('students.update_address');
         Route::put('students/{student}/update-achievements', [StudentController::class, 'updateAchievements'])->name('students.update_achievements');
         Route::put('students/{student}/update-final-scores', [StudentController::class, 'updateFinalScores'])->name('students.update_final_scores');
-        Route::put('students/{student}/update-school-choices', [StudentController::class, 'updateSchoolChoices'])->name('students.update_school_choices');
+        Route::put('students/{student}/update-school-choices', [StudentController::class, 'updateSchoolChoice'])->name('students.update_school_choice');
         Route::put('students/{student}/update-graduated-school', [StudentController::class, 'updateGraduatedSchool'])->name('students.update_graduated_school');
     });
 
     Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
-        Route::get('/dashboard', [StudentController::class, 'studentindex'])->name('student.dashboard.index');
+        Route::get('/dashboard', [StudentController::class, 'studentIndex'])->name('student.dashboard.index');
+        Route::get('/choose-schools', [StudentController::class, 'chooseSchools'])->name('student.choose.schools');
+        Route::put('/store-choice', [StudentController::class, 'storeChoice'])->name('student.store_choice');
     });
+    
+    
 });

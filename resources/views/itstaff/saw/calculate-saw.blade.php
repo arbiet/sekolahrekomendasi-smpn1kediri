@@ -1,8 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Calculate SAW') }}
-        </h2>
+        <div class="flex flex-row justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Calculate SAW') }}
+            </h2>
+            <div class="mb-4">
+                <a href="{{ route('check-probability.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Lihat Semua Cek Probabilitas Siswa
+                </a>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -16,7 +23,7 @@
                         <div class="mb-4">
                             <label for="student" class="block text-gray-700">Pilih Siswa:</label>
                             <select id="student" name="student" class="mt-1 block w-full">
-                                @foreach ($students as $student)
+                                @foreach ($students->where('status', 'active') as $student)
                                     <option value="{{ $student->id }}">{{ $student->name }}</option>
                                 @endforeach
                             </select>

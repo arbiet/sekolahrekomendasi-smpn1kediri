@@ -14,13 +14,42 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class StudentController extends Controller
 {
 
-    public function studentIndex()
+    public function chooseSchools()
     {
-        $student = Student::with(['address', 'achievements', 'finalScore', 'schoolChoice'])->findOrFail(Auth::id());
+        $studentId = Auth::user()->student->id;
+        $schools = School::all();
+        $student = Student::with(['address', 'achievements', 'finalScore', 'schoolChoice'])->findOrFail($studentId);
+        return view('student.choose_schools', compact('schools', 'student'));
+    }
+    
+    public function storeChoice(Request $request)
+    {
+        $request->validate([
+            'first_choice' => 'required|string|max:255',
+            'second_choice' => 'nullable|string|max:255',
+            'third_choice' => 'nullable|string|max:255',
+        ]);
+    
+        $student = Auth::user()->student;
+        $student->schoolChoice()->updateOrCreate(
+            ['student_id' => $student->id],
+            $request->only('first_choice', 'second_choice', 'third_choice')
+        );
+    
+        return redirect()->route('student.dashboard.index')->with('success', 'School choices updated successfully');
+    }
+    
+
+    public function studentindex()
+    {
+        $studentId = Auth::user()->student->id;
+        $student = Student::with(['address', 'achievements', 'finalScore', 'schoolChoice'])->findOrFail($studentId);
 
         // Initialize weights
         $weights = [
@@ -39,13 +68,28 @@ class StudentController extends Controller
         ];
 
         // Get student's average score
-        $averageScore = ($student->finalScore->mathematics + $student->finalScore->science + $student->finalScore->english + $student->finalScore->indonesian + $student->finalScore->civics) / 5;
+        $scores = [
+            $student->finalScore->mathematics,
+            $student->finalScore->science,
+            $student->finalScore->english,
+            $student->finalScore->indonesian,
+            $student->finalScore->civics,
+            $student->finalScore->religion,
+            $student->finalScore->physical_education,
+            $student->finalScore->arts_and_crafts,
+            $student->finalScore->local_content,
+        ];
 
+        $totalScore = array_sum($scores);
+        $numberOfSubjects = count($scores);
+        $averageScore = $totalScore / $numberOfSubjects;
+        
         // Get sorted schools by preference value
         $schoolsSorted = School::orderByDesc('preference_value')->get();
 
         foreach (['first_choice', 'second_choice', 'third_choice'] as $choice) {
-            $school = School::where('name', $student->schoolChoice->$choice)->first();
+            $schoolName = $student->schoolChoice->$choice;
+            $school = School::where('name', $schoolName)->first();
 
             if ($school) {
                 $C1 = $averageScore > $school->average_school_score ? 1 : 0;
@@ -66,8 +110,13 @@ class StudentController extends Controller
             }
         }
 
+        // Use dd() to display the results before returning the view
+        // dd(compact('student', 'probabilities'));
+        
         return view('student.dashboard', compact('student', 'probabilities'));
     }
+
+
     /**
      * Display a listing of the students.
      */
@@ -233,8 +282,10 @@ class StudentController extends Controller
     public function editSchoolChoice(Student $student)
     {
         $schoolChoice = $student->schoolChoice;
-        return view('itstaff.students.edit_school_choices', compact('student', 'schoolChoice'));
+        $schools = School::all(); // Assuming you have a School model to fetch school names
+        return view('itstaff.students.edit_school_choices', compact('student', 'schoolChoice', 'schools'));
     }
+    
 
     public function editGraduatedSchool(Student $student)
     {
@@ -331,7 +382,6 @@ class StudentController extends Controller
         Alert::success('Success', 'School choice updated successfully');
         return redirect()->route('students.show', $student->id);
     }
-    
 
     public function updateGraduatedSchool(Request $request, Student $student)
     {
@@ -349,5 +399,12 @@ class StudentController extends Controller
         return redirect()->route('students.show', $student->id);
     }
 
+    public function getSchoolData($schoolId)
+    {
+        $school = School::with(['facilities', 'extracurriculars', 'graduatedStudents', 'performanceRatings'])
+            ->findOrFail($schoolId);
+
+        return response()->json($school);
+    }
 
 }
