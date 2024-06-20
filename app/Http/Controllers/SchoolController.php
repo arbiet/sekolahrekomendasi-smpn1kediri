@@ -13,12 +13,16 @@ class SchoolController extends Controller
 {
     public function showJson($id)
     {
-        $school = School::with(['facilities', 'extracurriculars', 'graduatedStudents'])->findOrFail($id);
-        
-        $school->performance_ratings = $school->getPerformanceRatings();
-
-        return response()->json($school);
+        $school = School::with(['facilities', 'extracurriculars'])->findOrFail($id);
+        return response()->json([
+            'name' => $school->name,
+            'latitude' => $school->latitude,
+            'longitude' => $school->longitude,
+            'facilities' => $school->facilities,
+            'extracurriculars' => $school->extracurriculars
+        ]);
     }
+    
     /**
      * Display a listing of the schools.
      */

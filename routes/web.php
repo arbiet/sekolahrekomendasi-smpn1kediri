@@ -112,6 +112,8 @@ Route::middleware(['web', ToSweetAlert::class])->group(function () {
         Route::get('/dashboard', [StudentController::class, 'studentIndex'])->name('student.dashboard.index');
         Route::get('/choose-schools', [StudentController::class, 'chooseSchools'])->name('student.choose.schools');
         Route::put('/store-choice', [StudentController::class, 'storeChoice'])->name('student.store_choice');
+        Route::get('/schools/json/{id}', [SchoolController::class, 'showJson']);
+
     });
     
     
